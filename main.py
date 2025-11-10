@@ -1,4 +1,4 @@
-# --- START OF FILE main.py (Final Corrected Code for Render Deployment - Checked all print quotes) ---
+# --- START OF FILE main.py (Final Corrected Code for Render Deployment) ---
 
 # --- Imports from original main.py ---
 import requests , os , psutil , sys , jwt , pickle , json , binascii , time , urllib3 , base64 , datetime , re , socket , threading , ssl , pytz , aiohttp
@@ -38,11 +38,32 @@ app = Flask(__name__)
 # The list that your async loop populates with active connections
 ONLINE_USERS = [] 
 lock = threading.Lock()
-# ... (Other global bot variables remain here) ...
-
 
 # =================================================================
-# ✅ Health Check Route (Stops Render returning 404 on base URL)
+# 🛑 CRITICAL FIX: Add Stubs for Missing Bot Functions
+# =================================================================
+
+# Target, Pw, key, iv, AutHToKen, acc_name are required arguments
+async def MainBot(*args):
+    print("WARNING: MainBot logic is using a placeholder stub and is not fully functional.")
+    # In a real bot, this would contain the main login and packet loop.
+    # We use asyncio.Future to await indefinitely, keeping the task alive.
+    await asyncio.Future()
+
+# OnLineiP , OnLineporT , key , iv , AutHToKen are required arguments
+async def TcPOnLine(*args):
+    print("WARNING: TcPOnLine logic is using a placeholder stub and is not fully functional.")
+    # This task should be where your bot establishes connections and populates ONLINE_USERS.
+    # Without the real code, the bot will not connect.
+    await asyncio.Future()
+
+# --- Placeholder Definitions for the necessary variables to prevent NameErrors in main() ---
+# You must define your actual credentials and connection details here or load them from env/config
+Target, Pw, key, iv, AutHToKen, acc_name = "TARGET_IP", "PASSWORD", "KEY", "IV", "AUTH_TOKEN", "BOT_NAME"
+OnLineiP, OnLineporT = "ONLINE_IP", 1000
+
+# =================================================================
+# ✅ Health Check Route 
 # =================================================================
 @app.route('/', methods=['GET'])
 def api_status():
@@ -106,15 +127,10 @@ class BotConnection:
         return f"Packet for Emote {emote_id} dispatched."
         
 
-# --- Your main async functions (TcPOnLine, MainBot, etc. remain unchanged) ---
-# ... (Keep all your TcPOnLine, MainBot, get_tcp_ports, etc. functions here) ...
-
 # --- Main Execution Block (The part that runs the whole thing) ---
 async def main():
-    # ... (Your existing startup and variable setting code remains) ...
 
-    # --- Your original async tasks ---
-    # Assuming Target, Pw, key, iv, AutHToKen, acc_name, OnLineiP, OnLineporT are defined elsewhere in the bot code
+    # --- Your original async tasks now reference the stubs ---
     task1 = asyncio.create_task(MainBot(Target, Pw, key, iv, AutHToKen, acc_name)) 
     await asyncio.sleep(1)
     task2 = asyncio.create_task(TcPOnLine(OnLineiP , OnLineporT , key , iv , AutHToKen))
@@ -131,24 +147,21 @@ async def main():
     flask_thread.start()
     
     os.system('clear')
-    print("FIX_VERSION: Chat logic is now running a debug print check.") 
+    print("FIX_VERSION: All major syntax/name errors resolved. Deployment should proceed.") 
     print(render('WINTER', colors=['white', 'green'], align='center'))
     print('')
-    # Print 1: Used single quote for safe internal \n
-    print(f' - BoT STarTinG And OnLine on TarGeT : {TarGeT} | BOT NAME : {acc_name}\n')
-    # Print 2: Fixed by changing outer quotes to single quotes
+    # Fixed all print statements for internal quotes
+    print(f' - BoT STarTinG And OnLine on TarGeT : {Target} | BOT NAME : {acc_name}\n')
     print(f' - BoT sTaTus > GooD | OnLinE ! (:")') 
     print(f" - Web UI and API started on port {port}")
     print(f" - API Example: POST to /join with form data.")
-    # Print 3: Fixed by changing outer quotes to single quotes
     print(f' - Subscribe > Spideerio | Gaming ! (:")')    
     await asyncio.gather(task1, task2) # This keeps your bot running 24/7 (if kept awake)
 
 if __name__ == "__main__":
     try:
-        # Note: You need to make sure Target, Pw, key, iv, AutHToKen, acc_name, 
-        # OnLineiP, and OnLineporT are defined globally or within MainBot/TcPOnLine's scope 
-        # for this to run successfully beyond the deployment stage.
+        # Before running, ensure you define or load all necessary variables 
+        # (Target, Pw, key, iv, AutHToKen, acc_name, OnLineiP, OnLineporT)
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Bot Stopped by User.")
