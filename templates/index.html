@@ -3,20 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lite X Emote Sender</title>
+    <title>DECIMAL CHEATS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* ===== Password Overlay ===== */
+        #password-overlay {
+            position: fixed;
+            inset: 0;
+            background: #0f0f1b;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #password-box {
+            background: #1c1c2e;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            text-align: center;
+        }
+        #password-box h2 {
+            color: #ff2a2a;
+            margin-bottom: 20px;
+        }
+        #password-input {
+            padding: 10px;
+            width: 220px;
+            border: none;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        #enter-btn {
+            background: #ff2a2a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #enter-btn:hover { background: #ff4444; }
+        #error-msg { color: #ff5555; margin-top: 10px; }
+        #main-content { display: none; }
+
+        /* ===== Social Links Styling ===== */
+        .social-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+        .social-links img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s, filter 0.3s;
+        }
+        .social-links img:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px #ff2a2a);
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 🔐 Password Lock Screen -->
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2>Enter Access Password</h2>
+            <input type="password" id="password-input" placeholder="Enter password">
+            <br>
+            <button id="enter-btn">Enter</button>
+            <div id="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- 🌐 Main Website -->
+    <div id="main-content" class="container">
         <header>
-            <h1>Emote Sender</h1>
+            <h1>DECIMAL CHEATS</h1>
+
+            <!-- 🌐 Social Media Links -->
+            <div class="social-links">
+                <a href="https://discord.gg/decimalteam" target="_blank">
+                    <img src="{{ url_for('static', filename='icons/discord.png') }}" alt="Discord">
+                </a>
+                <a href="https://youtube.com/@decimalcheats" target="_blank">
+                    <img src="{{ url_for('static', filename='icons/youtube.png') }}" alt="YouTube">
+                </a>
+            </div>
         </header>
-        
+
         <div class="input-section">
             <div class="team-code-section">
                 <label for="team-code">Team Code:</label>
                 <input type="text" id="team-code" placeholder="Enter team code">
             </div>
+
             <div class="uid-section">
                 <label for="uid1">UID 1:</label>
                 <input type="text" class="uid-input" id="uid1" placeholder="Enter UID 1">
@@ -52,29 +140,39 @@
     </div>
 
     <script>
+        // ✅ Change your password here
+        const CORRECT_PASSWORD = "4788";
+
+        // Password gate logic
+        document.getElementById("enter-btn").addEventListener("click", function() {
+            const input = document.getElementById("password-input").value.trim();
+            const errorMsg = document.getElementById("error-msg");
+
+            if (input === CORRECT_PASSWORD) {
+                document.getElementById("password-overlay").style.display = "none";
+                document.getElementById("main-content").style.display = "block";
+            } else {
+                errorMsg.textContent = "Incorrect password!";
+            }
+        });
+
+        // ===== Send Button Logic =====
         document.addEventListener('DOMContentLoaded', function() {
             const emoteListContainer = document.querySelector('.emote-list');
             const resultBox = document.getElementById('result-box');
 
             emoteListContainer.addEventListener('click', function(event) {
-                // Check if a "Send" button was clicked
                 if (event.target.classList.contains('send-button')) {
                     const sendButton = event.target;
-                    
-                    // --- 1. Gather all data from the form ---
                     const teamCode = document.getElementById('team-code').value.trim();
                     const emoteId = sendButton.getAttribute('data-emote-id');
-                    
                     const uidInputs = document.querySelectorAll('.uid-input');
                     const uids = [];
                     uidInputs.forEach(input => {
                         const uidValue = input.value.trim();
-                        if (uidValue) {
-                            uids.push(uidValue);
-                        }
+                        if (uidValue) uids.push(uidValue);
                     });
 
-                    // --- 2. Validate the data ---
                     if (!teamCode) {
                         resultBox.textContent = 'Error: Please enter a team code.';
                         return;
@@ -83,36 +181,27 @@
                         resultBox.textContent = 'Error: Please enter at least one UID.';
                         return;
                     }
-                    
-                    resultBox.textContent = 'Sending request...';
-                    sendButton.disabled = true; // Prevent multiple clicks
 
-                    // --- 3. Prepare data and send to our own backend server ---
-                    const payload = {
-                        team_code: teamCode,
-                        emote_id: emoteId,
-                        uids: uids
-                    };
-                    
+                    resultBox.textContent = 'Sending request...';
+                    sendButton.disabled = true;
+
+                    const payload = { team_code: teamCode, emote_id: emoteId, uids: uids };
+
                     fetch('/send_emote', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     })
                     .then(response => response.json())
                     .then(data => {
-                        // --- 4. Display the response from our backend ---
-                        // Using JSON.stringify for nice formatting
-                        resultBox.textContent = JSON.stringify(data, null, 2); 
+                        resultBox.textContent = JSON.stringify(data, null, 2);
                     })
                     .catch(error => {
                         console.error('Fetch Error:', error);
-                        resultBox.textContent = 'Error communicating with the server. See console for details.';
+                        resultBox.textContent = 'Error communicating with the server.';
                     })
                     .finally(() => {
-                        sendButton.disabled = false; // Re-enable the button
+                        sendButton.disabled = false;
                     });
                 }
             });
