@@ -442,8 +442,8 @@
       const discordPw = formData.get('discord-pw').trim();
       const telegramPw = formData.get('telegram-pw').trim();
 
-      if (discordPw === "433" && telegramPw === "335") {            # passworddd
-        document.getElementById("loading").style.display = "flex";  # passwordd 
+      if (discordPw === "433" && telegramPw === "335") {          
+        document.getElementById("loading").style.display = "flex";   
 
         const response = await fetch('/do_login', {
           method: 'POST',
