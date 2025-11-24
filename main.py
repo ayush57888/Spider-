@@ -418,7 +418,7 @@ def do_login():
     discord_pw = request.form.get('discord-pw', '').strip()
     telegram_pw = request.form.get('telegram-pw', '').strip()
 
-    if discord_pw == "433" and telegram_pw == "335":
+    if discord_pw == "172011" and telegram_pw == "17201122":
         session['logged_in'] = True
         return jsonify({"status": "success", "redirect": "/index"})
     else:
@@ -500,7 +500,7 @@ async def MaiiiinE():
     global LOOP, key, iv, region, whisper_writer, online_writer, LoGinDaTaUncRypTinG
     LOOP = asyncio.get_running_loop()
 
-    Uid, Pw = '4292341778', '2F182645A263DACD78142DCC3458F984AA0B4FC78DC9BD3698AFAA9E3A41B315'
+    Uid, Pw = '4109713268', '21341D4CC40BF804C1A2A102FB0E26C075321EC3E49C4806C7A3F4E5D0AA07D3'
     open_id, access_token = await GeNeRaTeAccEss(Uid, Pw)
     if not open_id or not access_token: print("Invalid account"); return None
     PyL = await EncRypTMajoRLoGin(open_id, access_token)
